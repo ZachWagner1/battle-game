@@ -8,7 +8,6 @@ var opponentHP = 350;
 var opponentAttack = 15;
 
 var fight = function(opponentName) {
-    //window.alert("Welcome to the Battle Games!");
     while(opponentHP > 0 && playerHP > 0) {
 
         var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
@@ -58,7 +57,13 @@ var fight = function(opponentName) {
 };
 
 for(var i = 0; i < opponentNames.length; i++) {
-    var pickedOpponentName = opponentNames[i];
-    opponentHP = 350
-    fight(pickedOpponentName);
+    if (playerHP > 0) {
+        window.alert("Welcome to the Battle Games! Round " + ( i + 1 ));
+        var pickedOpponentName = opponentNames[i];
+        opponentHP = 350
+        fight(pickedOpponentName);
+    } else {
+        window.alert("You have lost your player in battle! Gamoe Over!");
+        break;
+    }
 }
