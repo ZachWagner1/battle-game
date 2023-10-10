@@ -1,14 +1,13 @@
 var playerName = window.prompt("Name your character!");
 var playerHP = 1000;
 var playerAttack = 50;
+var playerMoney = 100;
 
-var opponentName = "Gus"
+var opponentNames = ["Gus", "Joe", "Mike"]
 var opponentHP = 350;
 var opponentAttack = 15;
 
-var playerMoney = 100;
-
-var fight = function() {
+var fight = function(opponentName) {
     window.alert("Welcome to the Battle Games!");
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
 
@@ -56,10 +55,11 @@ var fight = function() {
         else {
             fight();
         }
-        window.alert(playerName + " has chosen to skip the fight!");
     } else {
         window.alert("You need to choose a valid option. Try again!");
     }   
 };
 
-fight();
+for(var i = 0; i < opponentNames.length; i++) {
+    fight(opponentNames[i]);
+}
