@@ -1,5 +1,5 @@
 var playerName = window.prompt("Name your character!");
-var playerHP = 1000;
+var playerHP = 500;
 var playerAttack = 50;
 var playerMoney = 100;
 
@@ -8,11 +8,24 @@ var opponentHP = 350;
 var opponentAttack = 15;
 
 var fight = function(opponentName) {
-    window.alert("Welcome to the Battle Games!");
-    var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+    //window.alert("Welcome to the Battle Games!");
+    while(opponentHP > 0 && playerHP > 0) {
 
-    // FIGHT is chosen
-    if (promptFight === "fight" || promptFight === "FIGHT") {
+        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+
+        if (promptFight === "skip" || promptFight === "SKIP") {
+            var confirmSkip = window.confirm("Are you sure you wish to skip the fight?");
+    
+            // yes / true then leave
+            if (confirmSkip) {
+                window.alert(playerName + " has decided to skip this fight. Goodbye!");
+                //remove money as a penalty
+                playerMoney = playerMoney - 10;
+                console.log("playerMoney", playerMoney);
+                break;
+            }
+        }
+    
         // hp update when player attacks
         opponentHP = opponentHP - playerAttack;
         console.log(
@@ -22,8 +35,9 @@ var fight = function(opponentName) {
         //opponent alive check
         if (opponentHP <= 0) {
             window.alert(opponentName + " has died!");
-        }    
-        else {
+            playerMoney = playerMoney + 20;
+            break;
+        } else {
             window.alert(opponentName + " still has " + opponentHP + " health remaining.");
         }
 
@@ -36,30 +50,15 @@ var fight = function(opponentName) {
         //player alive check
         if (playerHP <=0) {
             window.alert(playerName + " has died!");
-        }
-        else {
+            break;
+        } else {
             window.alert(playerName + " still has " + playerHP + " health remaining.");
         }
-
-    // SKIP is chosen
-    } else if (promptFight === "skip" || promptFight === "SKIP") {
-        var confirmSkip = window.confirm("Are you sure you wish to skip the fight?");
-
-        // yes / true then leave
-        if (confirmSkip) {
-            window.alert(playerName + " has decided to skip this fight. Goodbye!");
-        //remove money as a penalty
-        playerMoney = playerMoney - 10;
-        }
-        // no / ask again
-        else {
-            fight();
-        }
-    } else {
-        window.alert("You need to choose a valid option. Try again!");
-    }   
+    }
 };
 
 for(var i = 0; i < opponentNames.length; i++) {
-    fight(opponentNames[i]);
+    var pickedOpponentName = opponentNames[i];
+    opponentHP = 350
+    fight(pickedOpponentName);
 }
