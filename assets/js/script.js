@@ -70,6 +70,14 @@ var startGame = function() {
             var pickedOpponentName = opponentNames[i];
             opponentHP = 350
             fight(pickedOpponentName);
+            // not on last opponent
+            if (playerHP > 0 && i < opponentNames.length - 1) {
+                var storeConfirm = window.confirm("The fight is over, do you wish to visit the store before the next round?");
+                // yes
+                if (storeConfirm) {
+                    shop();
+                }
+            }
         } else {
             window.alert("You have lost your player in battle! Game Over!");
             break;
@@ -94,6 +102,48 @@ var endGame = function () {
         startGame();
     } else {
         window.alert("Thank you for playing! Come again soon!");
+    }
+};
+
+// Shop
+var shop = function() {
+    // ask what they want to do
+    var shopOptionPrompt = window.prompt(
+        "REFILL Hp, BOOST Attack, LEAVE. Enter: 'REFILL', 'BOOST', LEAVE' to select your choice."
+    );
+
+    switch (shopOptionPrompt) {
+        case "REFILL":
+        case "refill":
+            if (playerMoney >= 10) {
+                window.alert("Refilling player's hp by 25 for 10 money.");
+                playerHP = playerHP + 25;
+                playerMoney = playerMoney - 10;
+            } else {
+                window.alert("Come back with more money!");
+            }
+                break;
+        
+        case "BOOST":
+        case "boost":
+            if (playerMoney >= 15) {
+                window.alert("Boosting attack by 5 for 15 money.");
+                playerAttack = playerAttack + 5;
+                playerMoney = playerMoney - 15;
+            } else {
+                window.alert("Come back with more money!");
+            }
+                break;
+
+        case "LEAVE":
+        case "leave":
+            window.alert("Leaving store.");
+            break;
+
+        default:
+            window.alert("You did not choose a valid option. Try again!");
+            shop();
+            break;
     }
 };
 
