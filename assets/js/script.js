@@ -56,14 +56,45 @@ var fight = function(opponentName) {
     }
 };
 
-for(var i = 0; i < opponentNames.length; i++) {
-    if (playerHP > 0) {
-        window.alert("Welcome to the Battle Games! Round " + ( i + 1 ));
-        var pickedOpponentName = opponentNames[i];
-        opponentHP = 350
-        fight(pickedOpponentName);
-    } else {
-        window.alert("You have lost your player in battle! Gamoe Over!");
-        break;
+// Start Game
+
+var startGame = function() {
+    //reset stats
+    playerHP = 500;
+    playerAttack = 50;
+    playerMoney = 100;
+
+    for(var i = 0; i < opponentNames.length; i++) {
+        if (playerHP > 0) {
+            window.alert("Welcome to the Battle Games! Round " + ( i + 1 ));
+            var pickedOpponentName = opponentNames[i];
+            opponentHP = 350
+            fight(pickedOpponentName);
+        } else {
+            window.alert("You have lost your player in battle! Game Over!");
+            break;
+        }
     }
-}
+    endGame();
+    startGame();
+};
+
+// End Game
+var endGame = function () {
+    // Win
+    if (playerHP > 0) {
+        window.alert("Great job, you survived the Battle Game! Your score is " + playerMoney + ".");
+    } else {
+        window.alert("You have lost in the Battle Game!");
+    }
+
+    // Play again?
+    var playAgainConfirm = window.confirm("Do you wish to play again?");
+    if (playAgainConfirm) {
+        startGame();
+    } else {
+        window.alert("Thank you for playing! Come again soon!");
+    }
+};
+
+startGame();
