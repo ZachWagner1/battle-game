@@ -7,6 +7,12 @@ var opponentNames = ["Gus", "Joe", "Mike"]
 var opponentHP = 350;
 var opponentAttack = 15;
 
+//RNG
+var randomNumber = function (min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+    return value;
+};
+
 var fight = function(opponentName) {
     while(opponentHP > 0 && playerHP > 0) {
 
@@ -26,7 +32,8 @@ var fight = function(opponentName) {
         }
     
         // hp update when player attacks
-        opponentHP = opponentHP - playerAttack;
+        var damage = randomNumber(playerAttack -3, playerAttack);
+        opponentHP = Math.max(0, opponentHP - damage);
         console.log(
             playerName + " attacked " + opponentName + ". " + opponentName + " now has " + opponentHP + " health remaining."
         );
@@ -34,14 +41,15 @@ var fight = function(opponentName) {
         //opponent alive check
         if (opponentHP <= 0) {
             window.alert(opponentName + " has died!");
-            playerMoney = playerMoney + 20;
+            playerMoney = Math.max(0, playerMoney - 15);
             break;
         } else {
             window.alert(opponentName + " still has " + opponentHP + " health remaining.");
         }
 
         // opponent retaliates the players attack
-        playerHP = playerHP - opponentAttack;
+        var damage = randomNumber(opponentAttack - 3, opponentAttack);
+        playerHP = Math.max(0, playerHP - damage);
         console.log(
             opponentName + " attacked " + playerName + ". " + playerName + "now has " + playerHP + " health remaining."
         );
@@ -68,7 +76,7 @@ var startGame = function() {
         if (playerHP > 0) {
             window.alert("Welcome to the Battle Games! Round " + ( i + 1 ));
             var pickedOpponentName = opponentNames[i];
-            opponentHP = 350
+            opponentHP = randomNumber(40, 60);
             fight(pickedOpponentName);
             // not on last opponent
             if (playerHP > 0 && i < opponentNames.length - 1) {
