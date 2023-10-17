@@ -1,20 +1,11 @@
-var playerName = window.prompt("Name your character!");
-var playerHP = 500;
-var playerAttack = 50;
-var playerMoney = 100;
-
-var opponentNames = ["Gus", "Joe", "Mike"]
-var opponentHP = 350;
-var opponentAttack = 15;
-
 //RNG
 var randomNumber = function (min, max) {
     var value = Math.floor(Math.random() * (max - min + 1) + min);
     return value;
 };
 
-var fight = function(opponentName) {
-    while(opponentHP > 0 && playerHP > 0) {
+var fight = function(opponent) {
+    while(opponent.health > 0 && playerData.hp > 0) {
 
         var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
 
@@ -23,63 +14,107 @@ var fight = function(opponentName) {
     
             // yes / true then leave
             if (confirmSkip) {
-                window.alert(playerName + " has decided to skip this fight. Goodbye!");
+                window.alert(playerData.name + " has decided to skip this fight. Goodbye!");
                 //remove money as a penalty
-                playerMoney = playerMoney - 10;
-                console.log("playerMoney", playerMoney);
+                playerData.money = playerData.money - 10;
+                console.log("playerData.money", playerData.money);
                 break;
             }
         }
     
         // hp update when player attacks
-        var damage = randomNumber(playerAttack -3, playerAttack);
-        opponentHP = Math.max(0, opponentHP - damage);
+        var damage = randomNumber(playerData.attack -3, playerData.attack);
+        opponent.health = Math.max(0, opponent.health - damage);
         console.log(
-            playerName + " attacked " + opponentName + ". " + opponentName + " now has " + opponentHP + " health remaining."
+            playerData.name + " attacked " + opponent.name + ". " + opponent.name + " now has " + opponent.health + " health remaining."
         );
 
         //opponent alive check
-        if (opponentHP <= 0) {
-            window.alert(opponentName + " has died!");
-            playerMoney = Math.max(0, playerMoney - 15);
+        if (opponent.health <= 0) {
+            window.alert(opponent.name + " has died!");
+            playerData.money = Math.max(0, playerData.money - 15);
             break;
         } else {
-            window.alert(opponentName + " still has " + opponentHP + " health remaining.");
+            window.alert(opponent.name + " still has " + opponent.health + " health remaining.");
         }
 
         // opponent retaliates the players attack
-        var damage = randomNumber(opponentAttack - 3, opponentAttack);
-        playerHP = Math.max(0, playerHP - damage);
+        var damage = randomNumber(opponent.attack - 3, opponent.attack);
+        playerData.hp = Math.max(0, playerData.hp - damage);
         console.log(
-            opponentName + " attacked " + playerName + ". " + playerName + "now has " + playerHP + " health remaining."
+            opponent.name + " attacked " + playerData.name + ". " + playerData.name + "now has " + playerData.hp + " health remaining."
         );
 
         //player alive check
-        if (playerHP <=0) {
-            window.alert(playerName + " has died!");
+        if (playerData.hp <=0) {
+            window.alert(playerData.name + " has died!");
             break;
         } else {
-            window.alert(playerName + " still has " + playerHP + " health remaining.");
+            window.alert(playerData.name + " still has " + playerData.hp + " health remaining.");
         }
     }
 };
+
+var playerData = {
+    name: window.prompt("Name your character!"),
+    hp: 400,
+    attack: 30,
+    money: 100,
+    reset: function() {
+        this.hp = 400;
+        this.attack = 30;
+        this.money = 100;
+    },
+    refillHP: function() {
+        if (this.money >= 10) {
+            window.alert("Restoring player's hp by 25 for 10 money.");
+            this.hp += 25;
+            this.money += 10;
+        } else {
+            window.alert("You do not have enough money!");
+        }
+        
+    },
+    boostAttack: function() {
+        if (this.money >= 15) {
+            window.alert("Boosting player's attack by 5 for 15 money!");
+            this.attack += 5;
+            this.money += 15;
+        } else {
+            window.alert("You do not have enough money!");
+        }
+    }
+};
+
+var opponentData = [
+    {
+        name: "Gus",
+        attack: randomNumber(17,21)
+    },
+    {
+        name: "Joe",
+        attack: randomNumber (19,24)
+    },
+    {
+        name: "Mike",
+        attack: randomNumber (11,13)
+    }
+];
 
 // Start Game
 
 var startGame = function() {
     //reset stats
-    playerHP = 500;
-    playerAttack = 50;
-    playerMoney = 100;
+    playerData.reset();
 
-    for(var i = 0; i < opponentNames.length; i++) {
-        if (playerHP > 0) {
+    for(var i = 0; i < opponentData.length; i++) {
+        if (playerData.hp > 0) {
             window.alert("Welcome to the Battle Games! Round " + ( i + 1 ));
-            var pickedOpponentName = opponentNames[i];
-            opponentHP = randomNumber(40, 60);
-            fight(pickedOpponentName);
+            var pickedOpponentObj = opponentData[i];
+            pickedOpponentObj.health = randomNumber(200, 360);
+            fight(pickedOpponentObj);
             // not on last opponent
-            if (playerHP > 0 && i < opponentNames.length - 1) {
+            if (playerData.hp > 0 && i < opponentData.length - 1) {
                 var storeConfirm = window.confirm("The fight is over, do you wish to visit the store before the next round?");
                 // yes
                 if (storeConfirm) {
@@ -98,8 +133,8 @@ var startGame = function() {
 // End Game
 var endGame = function () {
     // Win
-    if (playerHP > 0) {
-        window.alert("Great job, you survived the Battle Game! Your score is " + playerMoney + ".");
+    if (playerData.hp > 0) {
+        window.alert("Great job, you survived the Battle Game! Your score is " + playerData.money + ".");
     } else {
         window.alert("You have lost in the Battle Game!");
     }
@@ -123,25 +158,13 @@ var shop = function() {
     switch (shopOptionPrompt) {
         case "REFILL":
         case "refill":
-            if (playerMoney >= 10) {
-                window.alert("Refilling player's hp by 25 for 10 money.");
-                playerHP = playerHP + 25;
-                playerMoney = playerMoney - 10;
-            } else {
-                window.alert("Come back with more money!");
-            }
-                break;
+            playerData.refillHP();
+            break;
         
         case "BOOST":
         case "boost":
-            if (playerMoney >= 15) {
-                window.alert("Boosting attack by 5 for 15 money.");
-                playerAttack = playerAttack + 5;
-                playerMoney = playerMoney - 15;
-            } else {
-                window.alert("Come back with more money!");
-            }
-                break;
+            playerData.boostAttack();
+            break;
 
         case "LEAVE":
         case "leave":
