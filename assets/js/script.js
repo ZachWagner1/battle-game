@@ -4,24 +4,34 @@ var randomNumber = function (min, max) {
     return value;
 };
 
+var fightOrSkip = function() {
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle?');
+
+    if (promptFight === "" || promptFight === null) {
+      window.alert("You need to provide a valid answer! Please try again.");
+      return fightOrSkip();
+    }
+  
+    promptFight = promptFight.toLowerCase()
+  
+    // skip chosen
+    if (promptFight === 'skip') {
+      // confirm 
+      var confirmSkip = window.confirm("Are you sure you want to quit?");
+    }
+  
+    if (confirmSkip) {
+      window.alert(playerInfo.name + ' has decided to skip the fight. Goodbye!');
+      // penalty for skip
+      playerInfo.money = Math.max(0, playerInfo.money - 5);
+      return true;
+    }
+    return false;
+}
+
 var fight = function(opponent) {
-    while(opponent.health > 0 && playerData.hp > 0) {
-
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            var confirmSkip = window.confirm("Are you sure you wish to skip the fight?");
-    
-            // yes / true then leave
-            if (confirmSkip) {
-                window.alert(playerData.name + " has decided to skip this fight. Goodbye!");
-                //remove money as a penalty
-                playerData.money = playerData.money - 10;
-                console.log("playerData.money", playerData.money);
-                break;
-            }
-        }
-    
+    while(opponent.health > 0 && playerData.hp > 0) {  
+        fightOrSkip();
         // hp update when player attacks
         var damage = randomNumber(playerData.attack -3, playerData.attack);
         opponent.health = Math.max(0, opponent.health - damage);
@@ -54,6 +64,17 @@ var fight = function(opponent) {
         }
     }
 };
+
+var getPlayerName = function() {
+    var name = "";
+
+    while (name === "" || name === null) {
+        name = window.prompt("What is your player's name?");
+    }
+
+    console.log("Your player's name is " + name);
+    return name;
+}
 
 var playerData = {
     name: window.prompt("Name your character!"),
